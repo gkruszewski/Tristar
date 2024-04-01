@@ -17,6 +17,7 @@ namespace TRISTAR.Assessment.People
     /// </summary>
     public class PersonClientRepository : IPersonRepository
     {
+        private const string ControllerUri = "api/people";
         private readonly HttpClient _httpClient;
 
         public PersonClientRepository(HttpClient httpClient)
@@ -31,7 +32,7 @@ namespace TRISTAR.Assessment.People
         /// <returns></returns>
         public async Task<Person> CreatePerson(EditPersonParameters parameters)
         {
-            var response = await _httpClient.PostAsJsonAsync("api/people", parameters);
+            var response = await _httpClient.PostAsJsonAsync(ControllerUri, parameters);
 
             return await response.Content.ReadFromJsonAsync<Person>();
         }
@@ -43,7 +44,7 @@ namespace TRISTAR.Assessment.People
         /// <returns></returns>
         public Task DeletePerson(Guid id)
         {
-            return _httpClient.DeleteAsync($"api/people/{id}");
+            return _httpClient.DeleteAsync($"{ControllerUri}/{id}");
         }
 
         /// <summary>
@@ -54,7 +55,7 @@ namespace TRISTAR.Assessment.People
         /// <returns></returns>
         public async Task<Person> EditPerson(Guid id, EditPersonParameters parameters)
         {
-            var response = await _httpClient.PatchAsJsonAsync($"api/people/{id}", parameters, new JsonSerializerOptions
+            var response = await _httpClient.PatchAsJsonAsync($"{ControllerUri}/{id}", parameters, new JsonSerializerOptions
             {
                 Converters = { new PatchParametersFactory() }
             });
@@ -83,7 +84,7 @@ namespace TRISTAR.Assessment.People
             AddQueryParameter(nameof(QueryPersonParameters.LastName), parameters.LastName);
             AddQueryParameter(nameof(QueryPersonParameters.Id), parameters.Id?.Select(id => id.ToString()));
 
-            return await _httpClient.GetFromJsonAsync<Person[]>($"api/people/{queryBuilder}");
+            return await _httpClient.GetFromJsonAsync<Person[]>($"{ControllerUri}/{queryBuilder}");
         }
 
         /// <summary>
@@ -93,14 +94,14 @@ namespace TRISTAR.Assessment.People
         /// <returns></returns>
         public Task<Person> GetPerson(Guid id)
         {
-            return _httpClient.GetFromJsonAsync<Person>($"api/people/{id}");
+            return _httpClient.GetFromJsonAsync<Person>($"{ControllerUri}/{id}");
         }
 
         /// <summary>
-        /// Converter to ignore writing changes that are not being tracked 
+        /// Json Converter to ignore writing changes that are not being tracked 
         /// </summary>
         /// <remarks>
-        /// Subclass properties that are null from not being changed should be ignored during deserialization
+        /// Subclass properties that are null and not being tracked should be ignored from deserialization
         /// </remarks>
         private class PatchParametersFactory : JsonConverterFactory
         {
@@ -111,10 +112,10 @@ namespace TRISTAR.Assessment.People
 
             public override JsonConverter CreateConverter(Type typeToConvert, JsonSerializerOptions options)
             {
-                return new PatchParametersBaseConverter();
+                return new PatchParametersConverter();
             }
 
-            private class PatchParametersBaseConverter : JsonConverter<PatchParametersBase>
+            private class PatchParametersConverter : JsonConverter<PatchParametersBase>
             {
                 public override PatchParametersBase Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) => throw new NotImplementedException();
 

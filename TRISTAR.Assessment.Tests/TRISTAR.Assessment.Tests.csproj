@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+
+    <IsPackable>false</IsPackable>
+
+    <RootNamespace>TRISTAR.Test</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="microsoft.aspnetcore.mvc.testing" Version="7.0.10" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.7.0" />
+    <PackageReference Include="MSTest.TestAdapter" Version="3.1.1" />
+    <PackageReference Include="MSTest.TestFramework" Version="3.1.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\TRISTAR.Assessment.Core\TRISTAR.Assessment.Core.csproj" />
+    <ProjectReference Include="..\TRISTAR.Assessment.Client\TRISTAR.Assessment.Client.csproj" />
+    <ProjectReference Include="..\TRISTAR.Assessment.Server\TRISTAR.Assessment.Server.csproj" />
+  </ItemGroup>
+
+</Project>

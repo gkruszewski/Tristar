@@ -72,11 +72,11 @@ namespace TRISTAR.Assessment.People
         {
             var queryBuilder = new QueryBuilder();
 
-            void AddQueryParameter(string key, IEnumerable<string> parameterValues)
+            void AddQueryParameter(string key, IEnumerable<string> values)
             {
-                if (parameterValues?.Any() ?? false)
+                if (values?.Any() ?? false)
                 {
-                    queryBuilder.Add(key, parameterValues);
+                    queryBuilder.Add(key, values);
                 }
             }
 

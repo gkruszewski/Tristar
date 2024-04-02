@@ -84,7 +84,7 @@ namespace TRISTAR.Assessment.People
             AddQueryParameter(nameof(QueryPersonParameters.LastName), parameters.LastName);
             AddQueryParameter(nameof(QueryPersonParameters.Id), parameters.Id?.Select(id => id.ToString()));
 
-            return await _httpClient.GetFromJsonAsync<Person[]>($"{ControllerUri}/{queryBuilder}");
+            return await _httpClient.GetFromJsonAsync<Person[]>(ControllerUri + queryBuilder);
         }
 
         /// <summary>

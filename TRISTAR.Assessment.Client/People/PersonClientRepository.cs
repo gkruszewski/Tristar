@@ -17,7 +17,7 @@ namespace TRISTAR.Assessment.People
     /// </summary>
     public class PersonClientRepository : IPersonRepository
     {
-        private const string ControllerUri = "api/people";
+        private const string RouteUri = "api/people";
         private readonly HttpClient _httpClient;
 
         public PersonClientRepository(HttpClient httpClient)
@@ -32,7 +32,7 @@ namespace TRISTAR.Assessment.People
         /// <returns></returns>
         public async Task<Person> CreatePerson(EditPersonParameters parameters)
         {
-            var response = await _httpClient.PostAsJsonAsync(ControllerUri, parameters);
+            var response = await _httpClient.PostAsJsonAsync(RouteUri, parameters);
 
             return await response.Content.ReadFromJsonAsync<Person>();
         }
@@ -44,7 +44,7 @@ namespace TRISTAR.Assessment.People
         /// <returns></returns>
         public Task DeletePerson(Guid id)
         {
-            return _httpClient.DeleteAsync($"{ControllerUri}/{id}");
+            return _httpClient.DeleteAsync($"{RouteUri}/{id}");
         }
 
         /// <summary>
@@ -55,7 +55,7 @@ namespace TRISTAR.Assessment.People
         /// <returns></returns>
         public async Task<Person> EditPerson(Guid id, EditPersonParameters parameters)
         {
-            var response = await _httpClient.PatchAsJsonAsync($"{ControllerUri}/{id}", parameters, new JsonSerializerOptions
+            var response = await _httpClient.PatchAsJsonAsync($"{RouteUri}/{id}", parameters, new JsonSerializerOptions
             {
                 Converters = { new PatchParametersFactory() }
             });
@@ -84,7 +84,7 @@ namespace TRISTAR.Assessment.People
             AddQueryParameter(nameof(QueryPersonParameters.LastName), parameters.LastName);
             AddQueryParameter(nameof(QueryPersonParameters.Id), parameters.Id?.Select(id => id.ToString()));
 
-            return await _httpClient.GetFromJsonAsync<Person[]>(ControllerUri + queryBuilder);
+            return await _httpClient.GetFromJsonAsync<Person[]>(RouteUri + queryBuilder);
         }
 
         /// <summary>
@@ -94,7 +94,7 @@ namespace TRISTAR.Assessment.People
         /// <returns></returns>
         public Task<Person> GetPerson(Guid id)
         {
-            return _httpClient.GetFromJsonAsync<Person>($"{ControllerUri}/{id}");
+            return _httpClient.GetFromJsonAsync<Person>($"{RouteUri}/{id}");
         }
 
         /// <summary>
